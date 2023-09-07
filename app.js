@@ -1,9 +1,9 @@
 const qrcode = require('qrcode-terminal');
-const { Client,LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { Client,/*LocalAuth,*/ MessageMedia } = require('whatsapp-web.js');
 const client = new Client({
-    authStrategy: new LocalAuth(),
+    /*authStrategy: new LocalAuth(),*/
     puppeteer: {    headless: false,
-            executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+            /*executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'*/
     }
  
 });
