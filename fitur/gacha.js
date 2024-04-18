@@ -3,18 +3,63 @@ const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
 
-const apiUrl = 'https://api.waifu.pics/sfw/waifu';
+const apiUrl = 'https://api.waifu.pics/sfw';
+const apiUrlNSFW = 'https://api.waifu.pics/nsfw';
 const downloadFolder = path.join(__dirname, 'downloads');
 const updateDateTime = require('../elses/time');
 const waktu = updateDateTime();
 
+const categories = [
+  "waifu",
+  "neko",
+  "shinobu",
+  "megumin",
+  "bully",
+  "cuddle",
+  "cry",
+  "hug",
+  "awoo",
+  "kiss",
+  "lick",
+  "pat",
+  "smug",
+  "bonk",
+  "yeet",
+  "blush",
+  "smile",
+  "wave",
+  "highfive",
+  "handhold",
+  "nom",
+  "bite",
+  "glomp",
+  "slap",
+  "kill",
+  "kick",
+  "happy",
+  "wink",
+  "poke",
+  "dance",
+  "cringe"
+];
 
-function gachawaifu(client, msg) {
+const categories1 = [
+  "waifu",
+  "neko",
+  "trap",
+  "blowjob"
+];
+
+function gachawaifu(client, msg, isNSFW) {
   if (!fs.existsSync(downloadFolder)) {
     fs.mkdirSync(downloadFolder);
   }
 
-  axios.get(apiUrl)
+  const selectedCategories = isNSFW ? categories1 : categories;
+  const selectedCategory = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
+  const categoryUrl = isNSFW ? `${apiUrlNSFW}/${selectedCategory}` : `${apiUrl}/${selectedCategory}`;
+
+  axios.get(categoryUrl)
     .then(async response => {
       const imageUrl = response.data.url;
       const imageFileName = imageUrl.split('/').pop();
@@ -29,6 +74,7 @@ function gachawaifu(client, msg) {
         response.data.pipe(fs.createWriteStream(imagePath))
           .on('finish', async () => {
             console.log('Gambar berhasil diunduh:', imageFileName);
+
             const imageBuffer = fs.readFileSync(path.join(downloadFolder, imageFileName));
             const base64Image = imageBuffer.toString('base64');
             
